@@ -1,0 +1,21 @@
+FROM python
+
+COPY . /app
+
+RUN apt-get update
+
+RUN pip install -r /app/requirement.txt
+
+WORKDIR /app
+
+ENV FLASK_APP=main.py
+ENV FLASK_ENV=development
+
+RUN git remote add origin https://github.com/Nabzoouu/spotify_retrieve_artiste.git | echo "Already set"
+RUN git config --global user.name "nabzoouu"
+RUN git config --global user.email "nabilzine.nz@gmail.com"
+
+RUN git checkout main
+EXPOSE 3000
+
+CMD /bin/bash
