@@ -1,6 +1,6 @@
 # Launch Postgres Database Container
 ```
-docker run --rm -p 5432:5432 -v $PWD:/var/lib/postgresql/data --name postgres -e POSTGRES_PASSWORD=password postgres
+docker run --rm -p 5432:5432 -v $PWD/groover_database:/var/lib/postgresql/data --name postgres -e POSTGRES_PASSWORD=password postgres
 ```
 - The default user is _postgres_
 
@@ -22,3 +22,7 @@ docker network inspect bridge
 - Find the right container by name, the host should look like _172.17.0.4/16_
 - The default user is _postgres_
 - The default password should be specified as an environment variable when the container is launched
+
+# Organisation of the database
+
+![Diagram of database](./diagram_of_database.png)
