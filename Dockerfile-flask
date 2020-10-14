@@ -15,7 +15,6 @@ RUN git remote add origin https://github.com/Nabzoouu/spotify_retrieve_artiste.g
 RUN git config --global user.name "nabzoouu"
 RUN git config --global user.email "nabilzine.nz@gmail.com"
 
-RUN git checkout main
 EXPOSE 3000
 
 CMD /bin/bash
