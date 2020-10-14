@@ -50,19 +50,34 @@ def build_spotify_client(db, client_id, client_secret, **kwargs):
                 album_exists = kwargs['Album'].query.filter_by(album_id=album['id']).first()
                 if album_exists :
                     print("Album already exists")
+                    album_element = None
                 else :
-                    album_element = kwargs['Album'](album_id=album['id'], name=album['name'], album_type=album["album_type"], release_date=album["release_date"], total_tracks=album["total_tracks"])
+                    album_element = kwargs['Album'](album_id=album['id'], name=album['name'], 
+                                                    album_type=album["album_type"], 
+                                                    release_date=album["release_date"], 
+                                                    total_tracks=album["total_tracks"])
                     db.session.add(album_element)
                 
                 for artist in album["artists"] :
-                    print(artist.keys())
                     artist_exists = kwargs['Artist'].query.filter_by(artist_id=artist['id']).first()
                     if artist_exists :
                         print("artist already exists")
+                        artist_element = None
                     else :
                         artist_element = kwargs['Artist'](artist_id=artist['id'], name=artist['name'])
                         db.session.add(artist_element)
+
+                    if artist_element and album_element and \
+                       artist_element not in album_element.artists \
+                       and album_element not in artist_element.albums :
+                        album_element.artists.append(artist_element)
+                        artist_element.albums.append(album_element)
+                    else :
+                        print("Album_artist exists already")
             db.session.commit()
+            
+            # print(kwargs['Album'].query.filter_by(album_id=album['id']).first().to_json())
+
             return None
     
     return SpotifyClient(client_id, client_secret)
