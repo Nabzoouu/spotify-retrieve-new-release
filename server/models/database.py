@@ -53,4 +53,17 @@ def build_db(db):
                          } for artist in self.artists
                        ] if self.artists else None
         }
+    def retrieve_artist(self):
+      return [ {"id": artist.artist_id, 
+                "name": artist.name,
+                # "albums" : [{"album_id": album.album_id, 
+                #               "name": album.name,
+                #               "album_type": album.album_type,
+                #               "release_date": album.release_date,
+                #               "total_tracks": album.total_tracks,
+                #               "artists": [ {"id": artist.artist_id, 
+                #                             "name": artist.name} for artist in album.artists
+                #                         ]} for album in artist.albums]
+                } for artist in self.artists
+              ]
   return Artist, Album, album_artist

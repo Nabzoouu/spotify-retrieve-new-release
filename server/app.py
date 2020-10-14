@@ -23,7 +23,7 @@ db.create_all()
 
 spotifyClient = build_spotify_client(db, app.config['CLIENT_ID'], app.config['CLIENT_SECRET'], Album=Album, Artist=Artist, Album_artist=Album_artist)
 
-build_routes(app, db, spotifyClient)
+build_routes(app, db, spotifyClient, Album = Album, Artist = Artist)
 
 print(spotifyClient.storeNewRelease({}))
 
