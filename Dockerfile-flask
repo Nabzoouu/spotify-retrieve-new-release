@@ -15,6 +15,11 @@ RUN git remote add origin https://github.com/Nabzoouu/spotify_retrieve_artiste.g
 RUN git config --global user.name "nabzoouu"
 RUN git config --global user.email "nabilzine.nz@gmail.com"
 
+RUN apt-get update && apt-get -y install cron
+COPY crontab /etc/cron.d/task
+RUN chmod 0644 /etc/cron.d/task
+RUN service cron start
+
 EXPOSE 3000
 
 CMD /bin/bash

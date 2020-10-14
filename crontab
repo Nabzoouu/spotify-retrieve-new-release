@@ -1,0 +1,1 @@
+*/1 * * * * cd /app/server && /usr/local/bin/python3.8 store_new_release.$

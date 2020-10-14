@@ -1,3 +1,8 @@
+# Documentation
+- on SQLAlchemy
+
+https://www.youtube.com/watch?v=4gRMV-wZTQs
+
 # Launch Postgres Database Container
 ```
 docker run --rm -p 5432:5432 -v $PWD/groover_database:/var/lib/postgresql/data --name postgres -e POSTGRES_PASSWORD=password postgres
@@ -5,6 +10,8 @@ docker run --rm -p 5432:5432 -v $PWD/groover_database:/var/lib/postgresql/data -
 - The default user is _postgres_
 
 __Warning : the volume must be mount on the local and not on a mounted partition (or it will make file autorization error__
+
+- Ici, la db est situé a /Bureau/Programmation
 
 # Launch Postgres Admin Container
 ```

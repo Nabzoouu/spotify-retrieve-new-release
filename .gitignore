@@ -1,4 +1,4 @@
 __pycache__
 .devcontainer
-**/instance
+**/secret
 !instance/README.md 
