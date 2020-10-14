@@ -1,1 +1,1 @@
-*/1 * * * * cd /app/server && /usr/local/bin/python3.8 store_new_release.$
+*/1 * * * * cd /app/server && /usr/local/bin/python3.8 store_new_release.py >> /app/logs/cron.log 2>&1

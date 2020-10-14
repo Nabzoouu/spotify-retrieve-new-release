@@ -18,8 +18,8 @@ RUN git config --global user.email "nabilzine.nz@gmail.com"
 RUN apt-get update && apt-get -y install cron
 COPY crontab /etc/cron.d/task
 RUN chmod 0644 /etc/cron.d/task
-RUN service cron start
+RUN crontab /etc/cron.d/task
 
 EXPOSE 3000
 
-CMD /bin/bash
+CMD service cron start && /bin/bash
