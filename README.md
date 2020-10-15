@@ -56,7 +56,7 @@ _Warning : PGADMIN_DEFAULT_EMAIL must be a valid email with @ and .com_
 - Change the config.py file with the ip and the post of your container for development and production (it should be accessible using the ```docker network inspect bridge``` command or by seeing the ip of your host server. See _Connect to the pgadmin page in a container_ on this file for more info)
 - Inside the file, at the same folder where there is the _Dockerfile-flask_ file, type in a terminal :
 
-__WARNING : Don't forget the credential in secret/credentials.py and the config in config.py__
+__WARNING : Don't forget the credential in server/secret/credentials.py and the config in server/config.py__
 ```
 docker build -t groover -f Dockerfile-flask .
 ```
