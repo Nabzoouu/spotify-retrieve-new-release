@@ -23,6 +23,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = f"{app.config['TYPE_OF_DATABASE']}://{ap
 db = SQLAlchemy(app)
 (Album, Artist, Album_artist) = build_db(db)
 
+db.create_all()
+
 build_routes(app, db, Album = Album, Artist = Artist)
 
 if app.config["ENV"] != "production":
