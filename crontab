@@ -1,1 +1,2 @@
-*/1 * * * * cd /app/server && /usr/local/bin/python3.8 store_new_release.py >> /app/logs/cron.log 2>&1
+# Tâche lancée tout les jours à 8h
+0 8 * * * cd /app/server && /usr/local/bin/python3.8 store_new_release.py >> /app/logs/cron.log 2>&1
