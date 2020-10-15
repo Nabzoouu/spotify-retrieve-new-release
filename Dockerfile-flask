@@ -21,5 +21,6 @@ RUN chmod 0644 /etc/cron.d/task
 RUN crontab /etc/cron.d/task
 
 EXPOSE 3000
+ENV FLASK_APP=/app/server/app.py
 
-CMD service cron start && /bin/bash
+ENTRYPOINT ["/bin/bash", "/app/entrypoint.sh"]

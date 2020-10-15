@@ -4,6 +4,9 @@ def build_init_test_db_command(app, db, **kwargs):
   @app.cli.command("init_test_db")
   def prepare_db_for_test():
     """Drops and Creates fresh database"""
+    """Album 1 > Artist 1"""
+    """Album 2 > Artist 2 feat Artist 3"""
+    """Album 3 > Artist 3"""
     db.drop_all()
     db.create_all()
 
@@ -35,17 +38,13 @@ def build_init_test_db_command(app, db, **kwargs):
     db.session.add(artist_element3)
 
     album_element1.artists.append(artist_element1)
-    # artist_element1.albums.append(album_element1)
 
-    album_element2.artists.append(artist_element2)
-    # artist_element2.albums.append(album_element2)
+    album_element2.artists.extend((artist_element2, artist_element3))
 
-    album_element3.artists.extend((artist_element2, artist_element3))
-    # artist_element2.albums.append(album_element3)
-    # artist_element3.albums.append(album_element3)
+    album_element3.artists.append(artist_element3)
 
 
     db.session.commit()
 
-    print("Initialized default DB")
+    print("Initialized default test DB")
 

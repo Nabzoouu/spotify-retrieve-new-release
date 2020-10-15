@@ -1,9 +1,10 @@
 import datetime
 
 def build_get_new_artists(app, db, **kwargs):
-  @app.route("/api/artists", methods=["GET"])
-  def get_new_artists():
-    list_album = kwargs['Album'].query.filter(kwargs['Album'].release_date >= datetime.date.today()- datetime.timedelta(days=60)).all()
+  @app.route('/api/artists/', defaults={'delta': app.config["DELTA_JOURS"]})
+  @app.route("/api/artists/<int:delta>", methods=["GET"])
+  def get_new_artists(delta):
+    list_album = kwargs['Album'].query.filter(kwargs['Album'].release_date >= datetime.date.today()- datetime.timedelta(days=delta)).all()
     result = {}
     for album in list_album :
       for artist in album.retrieve_artist() :

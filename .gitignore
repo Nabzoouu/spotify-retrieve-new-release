@@ -1,4 +1,3 @@
 __pycache__
 .devcontainer
-**/secret
-!instance/README.md 
+credentials.py

@@ -1,9 +1,18 @@
-# Documentation
-- on SQLAlchemy
+# Getting started
 
-https://www.youtube.com/watch?v=4gRMV-wZTQs
+## Requirements
 
-# Launch Postgres Database Container
+This server comes with a container, which is described in Dockerfile-Flask.
+
+It requires :
+
+- docker
+
+- the credentials for the Spotify API, in the file credentials.py (an example of the form of the file is presented in credentials_example.py) 
+
+- one or two database (one for production, one for developpement), the port and their IP Adress. In the end of this file, we will se how to create postgres container, how to get their IP and see them on pgadmin
+
+## Set up the database :  Launch Postgres Database Container
 ```
 docker run --rm -p 5432:5432 -v $PWD/groover_database:/var/lib/postgresql/data --name postgres -e POSTGRES_PASSWORD=password postgres
 ```
@@ -11,35 +20,64 @@ docker run --rm -p 5432:5432 -v $PWD/groover_database:/var/lib/postgresql/data -
 
 __Warning : the volume must be mount on the local and not on a mounted partition (or it will make file autorization error__
 
-- Ici, la db est situé a /Bureau/Programmation
+> You can set up as many database as you want as long as you map the port of your new databse on an unused port
 
-# Launch Postgres Admin Container
+## Set up the viewer for the database : Launch Postgres Admin Container
 ```
 docker run -p 8888:80 --rm --name pgadmin -e 'PGADMIN_DEFAULT_EMAIL=nabil@gmail.com' -e 'PGADMIN_DEFAULT_PASSWORD=SuperSecret' dpage/pgadmin4
 ```
-__Warning : PGADMIN_DEFAULT_EMAIL must be a valid email with @ and .com__
+_Warning : PGADMIN_DEFAULT_EMAIL must be a valid email with @ and .com_
 
-# Connect to the database in a container
-- Right click on server
-- Click on _Create > Server..._
-- To find the host name of the container, type on a terminal
+- This operation might be long. After a few minutes, the pgadmin page should be available at localhost:\<port that you mapped when you launched the container\> (here 8888)
+>
+>### Connect to the pgadmin page in a container
+>- Right click on server
+>- Click on _Create > Server..._
+>- Add the IP adress and the port. For that, you have 2 options :
+>
+>__1st : using the container host__
+>- To find the host name of the container, type on a terminal
+>```
+>docker network inspect bridge
+>```
+>- Find the right container by name, the host should >look like _172.17.0.4_ (it is the ip adress of the >network inside the container)
+>- Use 5432 for the port (because it is the port >used by postgres image inside the container)
+>- The default user is _postgres_
+>- The default password should be specified as an >environment variable when the container is launched
+>
+>__2nd : using the host port__
+>- Find the host container ip using the command >```iftable``` or in _Settings > Detail (next to the >switch button) > IPv4 Adress)_ (cf : https://>techwiser.com/find-ip-address/) 
+>- Use the mapped port for the port (the one you >choosed in the -p parameters, the one which is on >the left of the colon)
+>- The default user is _postgres_
+>- The default password should be specified as an >environment variable when the container is launched
+
+## Launch the server
+- Change the config.py file with the ip and the post of your container for development and production (it should be accessible using the ```docker network inspect bridge``` command or by seeing the ip of your host server. See _Connect to the pgadmin page in a container_ on this file for more info)
+- Inside the file, at the same folder where the is the _Dockerfile-flask_ flie, type in a terminale :
+
+__ WARNING : Don't forget the credential in secret/credentials.py and the config in config.py__
 ```
-docker network inspect bridge
+docker build -t groover -f Dockerfile-flask .
 ```
-Here, you have 2 options :
+- When the container is build, type in a terminal :
+```
+docker run -it --rm -p 3000:3000 -v $PWD:/app --name groover --env FLASK_ENV="developpement" groover
+```
+_Warning : you are launching the container in a development mode. If you want to launch it in production, simply change ```-v $PWD:/app --env FLASK_ENV="developpement"``` to ```-v $PWD/logs:/app/logs --env FLASK_ENV="production"```_ 
 
-1st : using the container host
-- Find the right container by name, the host should look like _172.17.0.4_ (it is the ip adress of the network inside the container)
-- Use 5432 for the port (because it is the port used by postgres image inside the container)
-- The default user is _postgres_
-- The default password should be specified as an environment variable when the container is launched
+- Launching in a production will also launch a cronjob to retrieve new artist everyday from the spotify API and launch the server on 0.0.0.0:3000 (or on what you precesed in the config.py file)
+- Launching in a development will simply open a terminal. You can then lauch the app using ```python server/app.py```.
 
-2nd : using the host port
-- Find the host container ip using the command ```iftable``` or in _Settings > Detail (next to the switch button) > IPv4 Adress)_ (cf : https://techwiser.com/find-ip-address/) 
-- Use the mapped port for the port (the one you choosed in the -p parameters, the one which is on the left of the colon)
-- The default user is _postgres_
-- The default password should be specified as an environment variable when the container is launched
+## Test
+- A request can be send inside the container by launching the tests/test_request.py file. 
 
-# Organisation of the database
+_Pay attention to  where you launch it. If your app is launched on 127.0.0.1 or localhost, then you should launch it inside the container (see docker exec for more info). If it is launched on 0.0.0.0, then you should launch your test on your host machine._
+
+## Organisation of the database
 
 ![Diagram of database](./diagram_of_database.png)
+
+## Documentation
+- on SQLAlchemy
+
+https://www.youtube.com/watch?v=4gRMV-wZTQs
